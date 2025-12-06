@@ -1,0 +1,43 @@
+{
+  "name": "oasys/core",
+  "description": "Minimal PSR-compatible HTTP framework with routing, middleware pipeline, and exception handling",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "http",
+    "kernel",
+    "router",
+    "middleware",
+    "psr-7",
+    "psr-11",
+    "psr-15"
+  ],
+  "require": {
+    "php": "^8.2",
+    "psr/container": "^1.0 || ^2.0",
+    "psr/http-message": "^1.0 || ^2.0",
+    "psr/http-server-middleware": "^1.0",
+    "psr/http-server-handler": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.0",
+    "nyholm/psr7": "^1.8",
+    "phpdocumentor/phpdocumentor": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Oasys\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Oasys\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "docs": "phpdoc -c phpdoc.xml.dist"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

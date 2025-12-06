@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor
+  configVersion="3"
+  xmlns="https://www.phpdoc.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://www.phpdoc.org/xsd/phpdoc.xsd"
+>
+  <title>Oasys Core API</title>
+  <paths>
+    <output>docs/api</output>
+  </paths>
+  <version number="1.0.0">
+    <api ignore-packages="true">
+      <source dsn=".">
+        <path>src</path>
+      </source>
+    </api>
+  </version>
+</phpdocumentor>

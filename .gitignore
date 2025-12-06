@@ -1,0 +1,11 @@
+# Composer
+/vendor/
+/composer.lock
+
+# PHPUnit
+/.phpunit.result.cache
+/.phpunit.cache
+
+# phpDocumentor
+/.phpdoc/
+/docs/api/
