@@ -1,5 +1,10 @@
 # Oasys
 
+[![Tests](https://github.com/kweensey/oasys-core/actions/workflows/tests.yml/badge.svg)](https://github.com/kweensey/oasys-core/actions/workflows/tests.yml)
+[![Latest Stable Version](https://poser.pugx.org/kweensey/oasys-core/v)](https://packagist.org/packages/kweensey/oasys-core)
+[![PHP Version Require](https://poser.pugx.org/kweensey/oasys-core/require/php)](https://packagist.org/packages/kweensey/oasys-core)
+[![License](https://poser.pugx.org/kweensey/oasys-core/license)](https://packagist.org/packages/kweensey/oasys-core)
+
 Minimal HTTP framework for modern PHP.
 
 Works with any PSR-7 messages, PSR-15 middleware, and PSR-11 container.

@@ -113,7 +113,12 @@ class Kernel
         /** @var MiddlewareAttribute $meta */
         $meta = $attribute->newInstance();
 
-        return new $meta->middlewareClass(...$meta->args);
+        // return new $meta->middlewareClass(...$meta->args);
+
+        return $this->container->make(
+          $meta->middlewareClass,
+          $meta->args
+        );
       },
       $attributes
     );
