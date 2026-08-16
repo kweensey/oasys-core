@@ -104,24 +104,56 @@ class Kernel
     $method = $class->getMethod($target->action);
 
     $attributes = [
-      ...$class->getAttributes(MiddlewareAttribute::class, ReflectionAttribute::IS_INSTANCEOF),
-      ...$method->getAttributes(MiddlewareAttribute::class, ReflectionAttribute::IS_INSTANCEOF)
+      ...$class->getAttributes(
+        MiddlewareAttribute::class,
+        ReflectionAttribute::IS_INSTANCEOF
+      ),
+      ...$method->getAttributes(
+        MiddlewareAttribute::class,
+        ReflectionAttribute::IS_INSTANCEOF
+      )
     ];
 
     return array_map(
-      function (ReflectionAttribute $attribute): MiddlewareInterface {
-        /** @var MiddlewareAttribute $meta */
-        $meta = $attribute->newInstance();
-
-        // return new $meta->middlewareClass(...$meta->args);
-
-        return $this->container->make(
-          $meta->middlewareClass,
-          $meta->args
-        );
-      },
+      $this->instantiateMiddleware(...),
       $attributes
     );
+  }
+
+  /**
+   * Create instance from middleware attribute
+   *
+   * @param ReflectionAttribute $attribute Middleware attribute
+   *
+   * @return MiddlewareInterface Middleware instance
+   */
+  protected function instantiateMiddleware(ReflectionAttribute $attribute): MiddlewareInterface
+  {
+    /** @var MiddlewareAttribute $meta */
+    $meta = $attribute->newInstance();
+
+    $class = $meta->middlewareClass;
+    $args  = $meta->args;
+
+    if ($this->container->has($class)) {
+      $entry = $this->container->get($class);
+
+      if (! $entry instanceof MiddlewareInterface && is_callable($entry)) {
+        return $entry(...$args);
+      }
+
+      if ($entry instanceof MiddlewareInterface && $args === []) {
+        return $entry;
+      }
+    }
+
+    $make = [$this->container, 'make'];
+
+    if (is_callable($make)) {
+      return $make($class, $args);
+    }
+
+    return new $class(...$args);
   }
 
   /**

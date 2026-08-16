@@ -1,9 +1,9 @@
 # Oasys
 
 [![Tests](https://github.com/kweensey/oasys-core/actions/workflows/tests.yml/badge.svg)](https://github.com/kweensey/oasys-core/actions/workflows/tests.yml)
-[![Latest Stable Version](https://poser.pugx.org/kweensey/oasys-core/v)](https://packagist.org/packages/kweensey/oasys-core)
-[![PHP Version Require](https://poser.pugx.org/kweensey/oasys-core/require/php)](https://packagist.org/packages/kweensey/oasys-core)
-[![License](https://poser.pugx.org/kweensey/oasys-core/license)](https://packagist.org/packages/kweensey/oasys-core)
+[![Latest Stable Version](https://img.shields.io/packagist/v/oasys/core)](https://packagist.org/packages/oasys/core)
+[![PHP Version Require](https://img.shields.io/packagist/php-v/oasys/core)](https://packagist.org/packages/oasys/core)
+[![License](https://img.shields.io/packagist/l/oasys/core)](https://packagist.org/packages/oasys/core)
 
 Minimal HTTP framework for modern PHP.
 
