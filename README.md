@@ -284,6 +284,16 @@ final class ContentTypeMiddleware implements MiddlewareInterface
 }
 ```
 
+### Resolution
+
+Middleware is resolved with the first option available:
+
+1. An existing container entry
+   * `MiddlewareInterface` instances are reused when no arguments are supplied
+   * Other callables are treated as factories and receive the middleware arguments
+2. If the container provides `make()`, it is used to autowire the middleware with the supplied arguments
+3. Otherwise the middleware is instantiated directly
+
 ---
 
 ## Exception handling
