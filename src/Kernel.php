@@ -10,6 +10,7 @@ use Oasys\Routing\Router;
 use Oasys\Routing\RouteHandler;
 use Oasys\Routing\RouteTarget;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -134,26 +135,48 @@ class Kernel
 
     $class = $meta->middlewareClass;
     $args  = $meta->args;
+    $make  = [$this->container, 'make'];
 
-    if ($this->container->has($class)) {
-      $entry = $this->container->get($class);
+    $viaGet = $args === [] || ! is_callable($make);
 
-      if (! $entry instanceof MiddlewareInterface && is_callable($entry)) {
-        return $entry(...$args);
+    try {
+      $entry = $viaGet
+        ? $this->container->get($class)
+        : $make($class, $args);
+    } catch (NotFoundExceptionInterface $exception) {
+      if (! class_exists($class)) {
+        throw $exception;
       }
 
-      if ($entry instanceof MiddlewareInterface && $args === []) {
-        return $entry;
+      $viaGet = false;
+
+      $entry = new $class(...$args);
+    }
+
+    if ($entry instanceof MiddlewareInterface) {
+      if ($args !== [] && $viaGet) {
+        throw new LogicException(sprintf(
+          'Middleware %s cannot accept arguments through shared service.',
+          $class
+        ));
       }
+
+      return $entry;
     }
 
-    $make = [$this->container, 'make'];
-
-    if (is_callable($make)) {
-      return $make($class, $args);
+    if (is_callable($entry)) {
+      $entry = $entry(...$args);
     }
 
-    return new $class(...$args);
+    if (! $entry instanceof MiddlewareInterface) {
+      throw new LogicException(sprintf(
+        'Middleware %s must implement MiddlewareInterface, resolved to %s.',
+        $class,
+        get_debug_type($entry)
+      ));
+    }
+
+    return $entry;
   }
 
   /**

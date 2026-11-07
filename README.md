@@ -238,10 +238,10 @@ final class ProfileController
 
 ### Parameters
 
-You can supply parameters to the middleware
+You can supply named parameters to the middleware
 
 ```php
-#[Middleware(ContentTypeMiddleware::class, 'application/json' /* , other parameters...*/)]
+#[Middleware(ContentTypeMiddleware::class, supported: 'application/json')]
 public function show(ServerRequestInterface $request): ResponseInterface
 {
     // ...
@@ -265,8 +265,6 @@ final class ContentTypeMiddleware implements MiddlewareInterface
 {
     public function __construct(
         protected string $supported
-
-        // other parameters...
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -286,13 +284,12 @@ final class ContentTypeMiddleware implements MiddlewareInterface
 
 ### Resolution
 
-Middleware is resolved with the first option available:
+1. Without parameters, middleware is retrieved from the container
+2. With parameters, the container's `make()` method is preferred when available
+3. Callable entries are invoked with the supplied parameters
+4. If the entry is not found, direct instantiation is attempted
 
-1. An existing container entry
-   * `MiddlewareInterface` instances are reused when no arguments are supplied
-   * Other callables are treated as factories and receive the middleware arguments
-2. If the container provides `make()`, it is used to autowire the middleware with the supplied arguments
-3. Otherwise the middleware is instantiated directly
+Construction parameters cannot be applied to existing middleware instances.
 
 ---
 
@@ -346,7 +343,7 @@ final class ErrorController
         return new Response(
             500,
             ['Content-Type' => 'text/plain; charset=utf-8'],
-            sprintf("Internal Server Error: %s\n", $e?->getMessage())
+            'Internal Server Error'
         );
     }
 }
